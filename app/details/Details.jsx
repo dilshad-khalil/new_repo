@@ -62,7 +62,7 @@ const Details = ({ movie_id }) => {
           <h1 className='text-white md:pr-0 text-4xl md:text-6xl font-[700] uppercase tracking-[-0.0725rem] md:pb-4 pb-2 flex-col flex-wrap flex gap-4 justify-center'>
             {title}
             <span className='flex items-center gap-2 pb-4'>
-              <span className='text-3xl'>{data?.vote_average}</span>
+              <span className='text-3xl'>{(data?.vote_average)}</span>
               <Image
                 src={star}
                 width={20}

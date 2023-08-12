@@ -1,6 +1,4 @@
-
-"use client"
-
+'use client'
 import React, { useEffect, useState } from 'react';
 import Tags from './Tags';
 import Button from './Button';
@@ -9,9 +7,8 @@ import Image from 'next/image';
 
 const Featured = () => {
   const [data, setData] = useState([]);
-  const [backdrop, setBackdrop] = useState('');
   const [title, setTitle] = useState('');
-  const [random, setRandom] = useState(Math.floor(Math.random() * 20))
+  const [randomMovie, setRandomMovie] = useState(null)
 
   const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 
@@ -24,6 +21,7 @@ const Featured = () => {
         const jsonData = await fetchedData.json();
         const data = jsonData.results;
         setData(data);
+        setRandomMovie(data[Math.floor(Math.random() * data.length)])
       } catch (err) {
         console.log(err);
       }
@@ -31,27 +29,15 @@ const Featured = () => {
     handleRequest();
   }, []);
 
-  useEffect(() => {
-    if (data.length > 0) {
-      const backdrop_path = `https://image.tmdb.org/t/p/original/${data[random]?.backdrop_path}`;
-      setBackdrop(backdrop_path);
-      setTitle(data[random]?.title);
-    }
-  }, []);
-
-  const vote_average = data[random]?.vote_average;
-  const id = data[random]?.id;
-
-
   return (
     <div className='h-[100dvh] w-screen z-0 overflow-hidden'>
       <div className='bg-gradient-to-b from-transparent to-[#090909] w-full z-0 h-[100vh] absolute'></div>
 
-      <img 
-      src={backdrop} 
+      <Image 
+      src={`https://image.tmdb.org/t/p/original/${randomMovie?.poster_path}`} 
       alt='Movie Poster' 
       className='w-full h-screen object-cover selection:bg-none' 
-      layout='fill'
+        layout='fill'
       />
 
       <div className='absolute bottom-20 left-4 md:left-20 lg:left-32 xl:left-40 2xl:left-58 z-10'>
@@ -59,7 +45,7 @@ const Featured = () => {
           {title}
           <span className='flex items-center gap-2'>
             <span className='text-3xl'>
-              {vote_average}
+              {randomMovie?.title}
             </span>
             <Image src={star} className='w-auto h-5 inline-block' alt='rating'/>
           </span>
@@ -69,7 +55,7 @@ const Featured = () => {
           <Tags styles={'bg-[#4D75DB]'} tagName={'Sc-Fi'} />
           <Tags styles={'bg-[#DBD54D]'} tagName={'Thriller'} />
         </div>
-          <Button buttonName={'Watch'} ButtonUrl={id} pathName={'/details'} />
+          <Button buttonName={'Watch'} ButtonUrl={randomMovie?.id} pathName={'/details'} />
       </div>
     </div>
   );
