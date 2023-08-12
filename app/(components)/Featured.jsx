@@ -1,4 +1,5 @@
-'use client'
+
+"use client"
 
 import React, { useEffect, useState } from 'react';
 import Tags from './Tags';
@@ -10,6 +11,7 @@ const Featured = () => {
   const [data, setData] = useState([]);
   const [backdrop, setBackdrop] = useState('');
   const [title, setTitle] = useState('');
+  const [random, setRandom] = useState(Math.floor(Math.random() * 20))
 
   const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 
@@ -29,25 +31,28 @@ const Featured = () => {
     handleRequest();
   }, []);
 
-  let randomNumber = Math.floor(Math.random() * 20);
-
   useEffect(() => {
     if (data.length > 0) {
-      const backdrop_path = `https://image.tmdb.org/t/p/original/${data[randomNumber]?.backdrop_path}`;
+      const backdrop_path = `https://image.tmdb.org/t/p/original/${data[random]?.backdrop_path}`;
       setBackdrop(backdrop_path);
-      setTitle(data[randomNumber]?.title);
+      setTitle(data[random]?.title);
     }
-  }, [data]);
+  }, []);
 
-  const vote_average = data[randomNumber]?.vote_average;
-  const id = data[randomNumber]?.id;
+  const vote_average = data[random]?.vote_average;
+  const id = data[random]?.id;
 
 
   return (
     <div className='h-[100dvh] w-screen z-0 overflow-hidden'>
       <div className='bg-gradient-to-b from-transparent to-[#090909] w-full z-0 h-[100vh] absolute'></div>
 
-      <img src={backdrop} alt='Movie Poster' className='w-full h-screen object-cover selection:bg-none' />
+      <img 
+      src={backdrop} 
+      alt='Movie Poster' 
+      className='w-full h-screen object-cover selection:bg-none' 
+      layout='fill'
+      />
 
       <div className='absolute bottom-20 left-4 md:left-20 lg:left-32 xl:left-40 2xl:left-58 z-10'>
         <h1 className='text-white md:pr-0 text-4xl md:text-6xl font-[700] uppercase tracking-[-0.0725rem] md:pb-4 pb-2 flex-col flex gap-4 justify-center'>
